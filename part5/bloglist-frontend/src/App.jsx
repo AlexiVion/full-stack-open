@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect } from 'react'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -10,6 +11,8 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [notification, setNotification] = useState(null)
+  const [notificationType, setNotificationType] = useState('success')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -26,6 +29,14 @@ const App = () => {
     }
   }, [])
 
+  const notify = (message, type = 'success') => {
+    setNotification(message)
+    setNotificationType(type)
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -36,7 +47,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch {
-      console.log('Wrong credentials')
+      notify('wrong username or password', 'error')
     }
   }
 
@@ -50,11 +61,12 @@ const App = () => {
     try {
       const newBlog = await blogService.create({ title, author, url })
       setBlogs(blogs.concat(newBlog))
+      notify(`a new blog ${newBlog.title} by ${newBlog.author} added`)
       setTitle('')
       setAuthor('')
       setUrl('')
     } catch {
-      console.log('Error creating blog')
+      notify('error creating blog', 'error')
     }
   }
 
@@ -62,6 +74,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
+        <Notification message={notification} type={notificationType} />
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -90,6 +103,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={notification} type={notificationType} />
       <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
 
       <h2>create new</h2>
