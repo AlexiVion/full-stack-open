@@ -2,14 +2,32 @@
 const assert = require('node:assert')
 const supertest = require('supertest')
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 const app = require('../app')
 const api = supertest(app)
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
+let token = ''
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  await Blog.insertMany(helper.initialBlogs)
+  await User.deleteMany({})
+
+  const passwordHash = await bcrypt.hash('secret', 10)
+  const user = new User({ username: 'root', name: 'Superuser', passwordHash })
+  await user.save()
+
+  const loginResponse = await api
+    .post('/api/login')
+    .send({ username: 'root', password: 'secret' })
+
+  token = loginResponse.body.token
+
+  const blogObjects = helper.initialBlogs.map(b => new Blog({ ...b, user: user._id }))
+  const promiseArray = blogObjects.map(b => b.save())
+  await Promise.all(promiseArray)
 })
 
 describe('when there is initially some blogs saved', () => {
@@ -45,6 +63,7 @@ describe('addition of a new blog', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -56,6 +75,23 @@ describe('addition of a new blog', () => {
     assert(titles.includes('Async/await simplifies async code'))
   })
 
+  test('fails with 401 if token is missing', async () => {
+    const newBlog = {
+      title: 'Async/await simplifies async code',
+      author: 'Robert C. Martin',
+      url: 'http://example.com/3',
+      likes: 8
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+  })
+
   test('defaults likes to 0 if missing', async () => {
     const newBlog = {
       title: 'Blog without likes',
@@ -65,6 +101,7 @@ describe('addition of a new blog', () => {
 
     const response = await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -80,6 +117,7 @@ describe('addition of a new blog', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(400)
 
@@ -95,6 +133,7 @@ describe('addition of a new blog', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(400)
 
@@ -104,12 +143,13 @@ describe('addition of a new blog', () => {
 })
 
 describe('deletion of a blog', () => {
-  test('succeeds with status code 204 if id is valid', async () => {
+  test('succeeds with status code 204 if id is valid and user is creator', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
