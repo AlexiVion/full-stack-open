@@ -55,6 +55,22 @@ describe('addition of a new blog', () => {
     const titles = blogsAtEnd.map(b => b.title)
     assert(titles.includes('Async/await simplifies async code'))
   })
+
+  test('defaults likes to 0 if missing', async () => {
+    const newBlog = {
+      title: 'Blog without likes',
+      author: 'Martin Fowler',
+      url: 'http://example.com/nolikes'
+    }
+
+    const response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    assert.strictEqual(response.body.likes, 0)
+  })
 })
 
 after(async () => {
