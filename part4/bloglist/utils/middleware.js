@@ -1,4 +1,6 @@
-﻿const logger = require('./logger')
+﻿const jwt = require('jsonwebtoken')
+const User = require('../models/user')
+const logger = require('./logger')
 
 const tokenExtractor = (req, res, next) => {
   const authorization = req.get('authorization')
@@ -6,6 +8,16 @@ const tokenExtractor = (req, res, next) => {
     req.token = authorization.replace('Bearer ', '')
   } else {
     req.token = null
+  }
+  next()
+}
+
+const userExtractor = async (req, res, next) => {
+  if (req.token) {
+    const decodedToken = jwt.verify(req.token, process.env.SECRET || 'secretkey')
+    if (decodedToken.id) {
+      req.user = await User.findById(decodedToken.id)
+    }
   }
   next()
 }
@@ -28,5 +40,6 @@ const errorHandler = (error, req, res, next) => {
 
 module.exports = {
   tokenExtractor,
+  userExtractor,
   errorHandler
 }
