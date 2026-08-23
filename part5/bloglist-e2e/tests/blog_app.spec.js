@@ -12,17 +12,25 @@ describe('Blog app', () => {
       await page.getByRole('button', { name: 'login' }).click()
     })
 
-    test('only creator sees the delete button for a blog', async ({ page }) => {
+    test('blogs are ordered according to likes with most likes first', async ({ page }) => {
       await page.getByRole('button', { name: 'new blog' }).click()
-      await page.locator('form input').nth(0).fill('Creator Only Blog')
-      await page.locator('form input').nth(1).fill('Creator Author')
-      await page.locator('form input').nth(2).fill('http://creator.com')
+      await page.locator('form input').nth(0).fill('Blog First')
+      await page.locator('form input').nth(1).fill('Author 1')
+      await page.locator('form input').nth(2).fill('http://blog1.com')
       await page.getByRole('button', { name: 'create' }).click()
 
-      const blog = page.getByText('Creator Only Blog Creator Author')
-      await blog.getByRole('button', { name: 'view' }).click()
+      await page.getByRole('button', { name: 'new blog' }).click()
+      await page.locator('form input').nth(0).fill('Blog Second')
+      await page.locator('form input').nth(1).fill('Author 2')
+      await page.locator('form input').nth(2).fill('http://blog2.com')
+      await page.getByRole('button', { name: 'create' }).click()
 
-      await expect(page.getByRole('button', { name: 'remove' })).toBeVisible()
+      const blogSecond = page.getByText('Blog Second Author 2')
+      await blogSecond.getByRole('button', { name: 'view' }).click()
+      await blogSecond.getByRole('button', { name: 'like' }).click()
+
+      const blogDivs = page.locator('.blog')
+      await expect(blogDivs.first()).toContainText('Blog Second')
     })
   })
 })
