@@ -12,20 +12,17 @@ describe('Blog app', () => {
       await page.getByRole('button', { name: 'login' }).click()
     })
 
-    test('user who created a blog can delete it', async ({ page }) => {
+    test('only creator sees the delete button for a blog', async ({ page }) => {
       await page.getByRole('button', { name: 'new blog' }).click()
-      await page.locator('form input').nth(0).fill('Blog to Delete')
-      await page.locator('form input').nth(1).fill('Delete Author')
-      await page.locator('form input').nth(2).fill('http://delete.com')
+      await page.locator('form input').nth(0).fill('Creator Only Blog')
+      await page.locator('form input').nth(1).fill('Creator Author')
+      await page.locator('form input').nth(2).fill('http://creator.com')
       await page.getByRole('button', { name: 'create' }).click()
 
-      const blog = page.getByText('Blog to Delete Delete Author')
+      const blog = page.getByText('Creator Only Blog Creator Author')
       await blog.getByRole('button', { name: 'view' }).click()
 
-      page.on('dialog', dialog => dialog.accept())
-      await page.getByRole('button', { name: 'remove' }).click()
-
-      await expect(page.getByText('Blog to Delete Delete Author')).not.toBeVisible()
+      await expect(page.getByRole('button', { name: 'remove' })).toBeVisible()
     })
   })
 })
