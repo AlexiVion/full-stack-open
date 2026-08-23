@@ -23,7 +23,11 @@ const App = () => {
       <div>
         {filtered.length > 10 && <p>Too many matches, specify another filter</p>}
         {filtered.length <= 10 && filtered.length > 1 && (
-          filtered.map(c => <div key={c.cca3}>{c.name.common}</div>)
+          filtered.map(c => (
+            <div key={c.cca3}>
+              {c.name.common} <button onClick={() => setQuery(c.name.common)}>show</button>
+            </div>
+          ))
         )}
         {filtered.length === 1 && (
           <div>
