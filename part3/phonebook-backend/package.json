@@ -7,7 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "build:ui": "rm -rf dist && cd ../phonebook && npm run build && cp -r dist ../phonebook-backend",
-    "deploy:full": "npm run build:ui && git add . && git commit -m 'deploy fullstack' && git push"
+    "lint": "eslint ."
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -17,6 +17,9 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^8.57.0",
+    "globals": "^15.0.0",
     "nodemon": "^3.1.0"
   }
 }
