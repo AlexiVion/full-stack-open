@@ -1,6 +1,6 @@
 ﻿import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, test, expect } from 'vitest'
+import { describe, test, expect, vi } from 'vitest'
 import Blog from './Blog'
 
 describe('<Blog />', () => {
@@ -30,5 +30,21 @@ describe('<Blog />', () => {
 
     expect(screen.getByText('http://testurl.com')).toBeDefined()
     expect(screen.getByText('likes 5')).toBeDefined()
+  })
+
+  test('if like button is clicked twice, event handler is called twice', async () => {
+    const mockHandler = vi.fn()
+    const user = userEvent.setup()
+
+    render(<Blog blog={blog} updateLikes={mockHandler} />)
+
+    const viewButton = screen.getByText('view')
+    await user.click(viewButton)
+
+    const likeButton = screen.getByText('like')
+    await user.click(likeButton)
+    await user.click(likeButton)
+
+    expect(mockHandler).toHaveBeenCalledTimes(2)
   })
 })
