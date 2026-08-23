@@ -78,6 +78,16 @@ const App = () => {
     }
   }
 
+  const handleDeleteBlog = async (id) => {
+    try {
+      await blogService.remove(id)
+      setBlogs(blogs.filter(blog => blog.id !== id))
+      notify('blog removed successfully')
+    } catch {
+      notify('error deleting blog', 'error')
+    }
+  }
+
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
   if (user === null) {
@@ -122,7 +132,13 @@ const App = () => {
 
       <br />
       {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateLikes={handleUpdateLikes} />
+        <Blog 
+          key={blog.id} 
+          blog={blog} 
+          updateLikes={handleUpdateLikes} 
+          deleteBlog={handleDeleteBlog}
+          user={user}
+        />
       )}
     </div>
   )
