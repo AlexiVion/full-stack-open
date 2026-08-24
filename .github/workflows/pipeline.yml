@@ -41,6 +41,12 @@ jobs:
           Write-Output "Ejecutando Health Check de la app..."
           node -e "console.log('Health check: OK (200)')"
 
+      - name: Notify build status
+        if: always()
+        shell: powershell
+        run: |
+          Write-Output "Estado de la ejecución: ${{ job.status }}"
+
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: self-hosted
