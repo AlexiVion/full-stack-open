@@ -56,12 +56,6 @@ export type Entry =
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
 
-type UnionOmit<T, K extends string | number | symbol> = T extends unknown
-  ? Omit<T, K>
-  : never;
-
-export type EntryWithoutId = UnionOmit<Entry, 'id'>;
-
 export interface Patient {
   id: string;
   name: string;
@@ -71,6 +65,3 @@ export interface Patient {
   occupation: string;
   entries: Entry[];
 }
-
-export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>;
-export type NewPatient = Omit<Patient, 'id' | 'entries'>;
