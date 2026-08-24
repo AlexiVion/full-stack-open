@@ -9,16 +9,20 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     padding: 15,
+    display: 'flex',
+    flexDirection: 'column',
   },
   button: {
     backgroundColor: theme.colors.primary,
     padding: 15,
     borderRadius: 4,
     alignItems: 'center',
+    marginTop: 5,
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 
