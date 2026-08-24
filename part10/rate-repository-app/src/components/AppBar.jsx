@@ -61,9 +61,15 @@ const AppBar = () => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
         <AppBarTab title="Repositories" to="/" />
         {me ? (
-          <AppBarTab title="Sign out" onPress={signOut} />
+          <>
+            <AppBarTab title="Create a review" to="/create-review" />
+            <AppBarTab title="Sign out" onPress={signOut} />
+          </>
         ) : (
-          <AppBarTab title="Sign in" to="/signin" />
+          <>
+            <AppBarTab title="Sign in" to="/signin" />
+            <AppBarTab title="Sign up" to="/signup" />
+          </>
         )}
       </ScrollView>
     </View>
