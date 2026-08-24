@@ -1,4 +1,5 @@
-﻿import { StyleSheet, Text, View } from 'react-native';
+﻿import { StyleSheet, View } from 'react-native';
+import RepositoryList from './RepositoryList';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,7 +11,7 @@ const styles = StyleSheet.create({
 const Main = () => {
   return (
     <View style={styles.container}>
-      <Text>Rate Repository Application</Text>
+      <RepositoryList />
     </View>
   );
 };
