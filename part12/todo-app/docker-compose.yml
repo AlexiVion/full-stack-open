@@ -1,0 +1,31 @@
+services:
+  app-mongo:
+    image: mongo:6.0
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=rootuser
+      - MONGO_INITDB_ROOT_PASSWORD=rootpass
+    volumes:
+      - ./mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+  app-backend:
+    build:
+      context: ./todo-backend
+      dockerfile: Dockerfile
+    ports:
+      - "3005:3000"
+    environment:
+      - MONGO_URL=mongodb://rootuser:rootpass@app-mongo:27017/the_database?authSource=admin
+      - PORT=3000
+    depends_on:
+      - app-mongo
+
+  app-frontend:
+    build:
+      context: ./todo-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - VITE_BACKEND_URL=http://localhost:3005
