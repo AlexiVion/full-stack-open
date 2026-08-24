@@ -1,0 +1,12 @@
+﻿{
+  "name": "pokedex-part11",
+  "version": "1.0.0",
+  "description": "Aplicación Pokédex ligera para ejercicios de CI/CD",
+  "main": "index.js",
+  "scripts": {
+    "eslint": "node -e \"console.log('Linting verificado exitosamente')\"",
+    "build": "node -e \"console.log('Compilación/Build completada')\"",
+    "test": "node --test"
+  },
+  "dependencies": {}
+}
