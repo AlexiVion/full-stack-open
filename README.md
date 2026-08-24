@@ -1,28 +1,30 @@
-﻿# Full Stack Open
+# Full Stack Open - University of Helsinki
 
-University of Helsinki — Full Stack Open
+Repositorio con la resolución completa de ejercicios y proyectos del curso **Full Stack Open**.
 
-Repositorio personal para ejercicios y proyectos del curso.
+## 📚 Estructura del Repositorio
 
-## Progress
+| Parte | Temática Principal | Estado |
+| :--- | :--- | :---: |
+| **Part 0** | Fundamentos Web & SPA | ✅ |
+| **Part 1** | Introducción a React | ✅ |
+| **Part 2** | Comunicación con Servidor & Axios | ✅ |
+| **Part 3** | Node.js, Express & MongoDB | ✅ |
+| **Part 4** | Autenticación JWT & Testing Backend | ✅ |
+| **Part 5** | Testing Frontend & E2E (Playwright) | ✅ |
+| **Part 6** | Estado Global (Redux & React Query) | ✅ |
+| **Part 7** | React Router & Custom Hooks | ✅ |
+| **Part 8** | GraphQL & Apollo Server/Client | ✅ |
+| **Part 9** | TypeScript (Frontend & Backend) | ✅ |
+| **Part 10** | React Native & Expo | ✅ |
+| **Part 11** | CI/CD & GitHub Actions | ✅ |
+| **Part 12** | Contenedores (Docker & Docker Compose) | ✅ |
+| **Part 13** | Bases de Datos Relacionales (PostgreSQL/Sequelize) | ✅ |
+| **Part 14** | Proyecto Final & Consolidación | ✅ |
 
-- [ ] Part 0 — Fundamentals of Web Apps
-- [ ] Part 1 — Introduction to React
-- [ ] Part 2 — Communicating with Server
-- [ ] Part 3 — Programming a Server with NodeJS and Express
-- [ ] Part 4 — Testing Express Servers, User Administration
-- [ ] Part 5 — Testing React Apps
-- [ ] Part 6 — Advanced State Management
-- [ ] Part 7 — React Router, Custom Hooks, Styling
-- [ ] Part 8 — GraphQL
-- [ ] Part 9 — TypeScript
-- [ ] Part 10 — React Native
-- [ ] Part 11 — CI/CD
-- [ ] Part 12 — Containers
-- [ ] Part 13 — Relational Databases
-- [ ] Part 14 — Next.js
-
-## University
-
-University of Helsinki
-Full Stack Open
+## 🛠️ Stack Tecnológico
+* **Frontend**: React, Vite, Redux Toolkit, React Query, React Router, React Native (Expo)
+* **Backend**: Node.js, Express, GraphQL (Apollo), REST APIs
+* **Bases de Datos**: MongoDB (Mongoose), PostgreSQL (Sequelize)
+* **Lenguajes**: JavaScript (ES6+), TypeScript
+* **DevOps & Testing**: Docker, Docker Compose, GitHub Actions, Jest/Vitest, Playwright
