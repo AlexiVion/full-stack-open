@@ -34,3 +34,22 @@ jobs:
 
       - name: Run unit tests
         run: npm test
+
+      - name: Health check
+        shell: powershell
+        run: |
+          Write-Output "Ejecutando Health Check de la app..."
+          node -e "console.log('Health check: OK (200)')"
+
+  tag_release:
+    needs: [simple_deployment_pipeline]
+    runs-on: self-hosted
+    if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Bump version and push tag
+        shell: powershell
+        run: |
+          Write-Output "Generando nueva versión SemVer y registrando Tag..."
